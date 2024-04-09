@@ -3,14 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPW.Prezentacja.View", "TPW\TPW.Prezentacja.View.csproj", "{B486C50D-8E01-4FCC-A857-9BA296D26540}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPW.Prezentacja.View", "TPW\TPW.Prezentacja.View.csproj", "{B486C50D-8E01-4FCC-A857-9BA296D26540}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPW.Dane", "TPW.Dane\TPW.Dane.csproj", "{7D9AC764-17CB-4316-96B1-C28D47DA36A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPW.Dane", "TPW.Dane\TPW.Dane.csproj", "{7D9AC764-17CB-4316-96B1-C28D47DA36A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPW.Dane.Tests", "TPW.Dane.Tests\TPW.Dane.Tests.csproj", "{26E9B4F0-330C-4C0A-AC7B-43C1A3A246D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPW.Dane.Tests", "TPW.Dane.Tests\TPW.Dane.Tests.csproj", "{26E9B4F0-330C-4C0A-AC7B-43C1A3A246D7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7D9AC764-17CB-4316-96B1-C28D47DA36A7} = {7D9AC764-17CB-4316-96B1-C28D47DA36A7}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPW.Logika", "TPW.Logika\TPW.Logika.csproj", "{718D5891-D047-4288-9427-6CE57AA8E0F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tpw.Logika.Tests", "Tpw.Logika.Tests\Tpw.Logika.Tests.csproj", "{2ECF9446-6BE8-458C-9273-80C5A5A615E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +34,14 @@ Global
 		{26E9B4F0-330C-4C0A-AC7B-43C1A3A246D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26E9B4F0-330C-4C0A-AC7B-43C1A3A246D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26E9B4F0-330C-4C0A-AC7B-43C1A3A246D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{718D5891-D047-4288-9427-6CE57AA8E0F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{718D5891-D047-4288-9427-6CE57AA8E0F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{718D5891-D047-4288-9427-6CE57AA8E0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{718D5891-D047-4288-9427-6CE57AA8E0F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ECF9446-6BE8-458C-9273-80C5A5A615E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ECF9446-6BE8-458C-9273-80C5A5A615E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ECF9446-6BE8-458C-9273-80C5A5A615E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ECF9446-6BE8-458C-9273-80C5A5A615E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
