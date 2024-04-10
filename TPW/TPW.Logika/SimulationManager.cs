@@ -5,6 +5,9 @@ using TPW.Dane;
 
 namespace TPW.Logika
 {
+    /// <summary>
+    /// Klasa oidpowiedzialna za symulację
+    /// </summary>
     public class SimulationManager : IDisposable
     {
         private readonly Plane m_plane;
@@ -40,13 +43,25 @@ namespace TPW.Logika
             }
         }
 
+        /// <summary>
+        /// Konstruktor
+        /// </summary>
+        /// <param name="plane">Plansza</param>
+        /// <param name="dane">Ewentualne DaneApiBase</param>
         public SimulationManager (Plane plane, DaneApiBase? dane = default)
         {
             this.m_plane = plane;
             this.dane = dane ?? DaneApiBase.GetApi();
             this.Balls = new List<IBall>();
         }
-        
+
+        /// <summary>
+        /// Funkcja generująca kulki z parametrami z zakresu na planszy
+        /// </summary>
+        /// <param name="ballsNum">Ilość kulek</param>
+        /// <param name="radius">Promień kulek</param>
+        /// <param name="minVel">Minimaslna prędkość</param>
+        /// <param name="maxVel">Maksymalna prędkość</param>
         public void CreateRandomBalls(uint ballsNum, double radius, double minVel, double maxVel)
         {
             Balls = new List<IBall>();
@@ -58,6 +73,9 @@ namespace TPW.Logika
             }
         }
 
+        /// <summary>
+        /// Rozpoczęcie symulacji kulek na planszy
+        /// </summary>
         public void StartSimulation()
         {
             foreach(IBall b in Balls)
@@ -66,6 +84,9 @@ namespace TPW.Logika
             }
         }
 
+        /// <summary>
+        /// Zakończenie symulacji kulek na planszy
+        /// </summary>
         public void StopSimulation()
         {
             foreach (IBall b in Balls)
@@ -74,6 +95,9 @@ namespace TPW.Logika
             }
         }
 
+        /// <summary>
+        /// Zatrzymanie symulacji i usunięcie kulek z planszy
+        /// </summary>
         public void ClearBalls()
         {
             StopSimulation();
@@ -90,6 +114,15 @@ namespace TPW.Logika
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Sprawdza czy jest kolizja w trybie rekursywnym
+        /// </summary>
+        /// <param name="lastPos">Wcześniuejsza pozycja</param>
+        /// <param name="newPos">Nowa pozycja</param>
+        /// <param name="currVel">Aktualna prędkość</param>
+        /// <param name="radius">Promień kulki</param>
+        /// <param name="totalTime">Czas</param>
+        /// <returns>Zwraca nową pozycje kulki i jej prędkość</returns>
         private (Pos2D, Pos2D) CheckCollisionsRecursion(Pos2D lastPos, Pos2D newPos, Pos2D currVel, double radius, double totalTime, uint maxNum = 3, uint num = 0)
         {
             // Plane Points:
@@ -161,6 +194,11 @@ namespace TPW.Logika
             return CheckCollisionsRecursion(lastPos, newPos, currVel, radius, totalTime, maxNum, num);
         }
 
+        /// <summary>
+        /// Wywołuje CheckCollisionsRecursion i zmienia parametry prędkości i pozycji
+        /// </summary>
+        /// <param name="source">Kulka dla której sprawdzamy kolizje</param>
+        /// <param name="e">Argumenty dla PositionChangeEventArgs</param>
         private void CheckCollisions(object source, PositionChangeEventArgs e)
         {
             IBall b =  (IBall)source;

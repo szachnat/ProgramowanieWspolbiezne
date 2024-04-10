@@ -2,8 +2,19 @@ using TPW.Dane;
 
 namespace TPW.Logika
 {
+    /// <summary>
+    /// Klasa implementuj¹ca zderzenia
+    /// </summary>
     public class CollisionManager
     {
+        /// <summary>
+        /// Okreœla czas zderzenia z nieuchom¹ lini¹
+        /// </summary>
+        /// <param name="startObjPos">Opcz¹tkowa pozycja obiektu</param>
+        /// <param name="objVel">Prêdkoœæ obiektu</param>
+        /// <param name="linePoint1">Pocz¹tkowy punkt linii</param>
+        /// <param name="linePoint2">Koñcowy punkt linii</param>
+        /// <returns>Zwraca czas, po którym nast¹pi kolizja</returns>
         public static double TimeOfCollisionWithLine(Pos2D startObjPos, Pos2D objVel, Pos2D linePoint1, Pos2D linePoint2)
         {
             double xDiff = linePoint2.X - linePoint1.X;

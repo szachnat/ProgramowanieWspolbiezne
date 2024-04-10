@@ -4,6 +4,9 @@ using TPW.Dane;
 
 namespace TPW.Logika
 {
+    /// <summary>
+    /// Baza klas z Api logiki
+    /// </summary>
     public abstract class LogikaApiBase : IDisposable
     {
         public abstract IEnumerable<IBall> Balls { get; }
@@ -16,6 +19,11 @@ namespace TPW.Logika
 
         public abstract void Dispose();
 
+        /// <summary>
+        /// Zwraca nową LogikaApiBase
+        /// </summary>
+        /// <param name="dane">Ewentualne DaneApiBase</param>
+        /// <returns>Zwraca LogikaApiBase</returns>
         public static LogikaApiBase GetApi(DaneApiBase? dane = null)
         {
             return new LogikaApi(dane ?? DaneApiBase.GetApi());
