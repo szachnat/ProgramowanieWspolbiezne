@@ -4,6 +4,9 @@ using System;
 
 namespace TPW.Dane
 {
+    /// <summary>
+    /// klasa tworzącqa obiekty kulek
+    /// </summary>
     public class Ball : IBall
     {
         #region BallBase
@@ -13,6 +16,13 @@ namespace TPW.Dane
         private Pos2D m_pos;
         private Pos2D m_vel;
 
+        /// <summary>
+        /// Konstruktor kulek
+        /// </summary>
+        /// <param name="id">ID kulki</param>
+        /// <param name="radius">Promień kulki</param>
+        /// <param name="pos">Pozycja startowa kulki</param>
+        /// <param name="vel">Prędkość kulki</param>
         public Ball (long id, double radius, Pos2D pos, Pos2D vel)
         {
             this._id = id;
@@ -26,36 +36,64 @@ namespace TPW.Dane
             };
         }
 
+        /// <summary>
+        /// Setter promienia kulki
+        /// </summary>
+        /// <param name="radius">Nowy promień</param>
         public void SetRadius(double radius)
         {
             this.m_radius = radius;
         }
 
+        /// <summary>
+        /// Setter pozycji kulki
+        /// </summary>
+        /// <param name="pos">Nowa pozycja</param>
         public void SetPos(Pos2D pos)
         {
             this.m_pos = pos;
         }
 
+        /// <summary>
+        /// Setter prędkości kulki
+        /// </summary>
+        /// <param name="pos">Nowa prędkośc</param>
         public void SetVel(Pos2D vel)
         {
             this.m_vel = vel;
         }
 
+        /// <summary>
+        /// Getter ID
+        /// </summary>
+        /// <returns>Zwraca ID</returns>
         public long GetId()
         {
             return this._id;
         }
 
+        /// <summary>
+        /// Getter promienia
+        /// </summary>
+        /// <returns>Zwraca promień</returns>
         public double GetRadius()
         {
             return this.m_radius;
         }
 
+        /// <summary>
+        /// Getter pozycji
+        /// </summary>
+        /// <returns>Zwraca pozycje</returns>
         public Pos2D GetPos()
         {
             return this.m_pos;
         }
 
+        /// <summary>
+        /// Getter prędkości
+        /// </summary>
+        /// <returns>Zwraca prędkość</returns>
         public Pos2D GetVel()
         {
             return this.m_vel;
@@ -65,6 +103,7 @@ namespace TPW.Dane
 
         #region INotifyPositionChanged
 
+        //deklaracja zdarzenia
         public event PositionChangeEventHandler? OnPositionChange;
 
         #endregion INotifyPositionChanged
@@ -74,6 +113,9 @@ namespace TPW.Dane
         private readonly Thread m_thread;
         private bool m_endThread;
 
+        /// <summary>
+        /// Tworzenie wątku
+        /// </summary>
         public void StartThread()
         {
             if (this.m_thread.ThreadState != System.Threading.ThreadState.Background) 
@@ -82,6 +124,9 @@ namespace TPW.Dane
             }
         }
 
+        /// <summary>
+        /// Poruszanie piłki (jako wątku)
+        /// </summary>
         private void ThreadMethod()
         {
             Stopwatch stopwatch = new();
@@ -100,6 +145,9 @@ namespace TPW.Dane
             }
         }
 
+        /// <summary>
+        /// Usuwanie wątku
+        /// </summary>
         public void EndThread()
         {
             if(this.m_thread.ThreadState == System.Threading.ThreadState.Background)

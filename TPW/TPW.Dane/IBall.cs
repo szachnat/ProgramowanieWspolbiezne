@@ -2,6 +2,9 @@
 
 namespace TPW.Dane
 {
+    /// <summary>
+    /// Interfejs implementowany prze kulkę
+    /// </summary>
     public interface IBall : INotifyPositionChanged, IDisposable
     {
         #region BallBase
