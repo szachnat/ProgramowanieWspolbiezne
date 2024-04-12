@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TPW.Prezentacja.Model;
+using TPW.Prezentacja.ViewModel;
 
 namespace TPW
 {

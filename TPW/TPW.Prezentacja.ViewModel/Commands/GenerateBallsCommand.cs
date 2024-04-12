@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using TPW.Dane;
 
 namespace TPW.Prezentacja.ViewModel.Commands
 {
@@ -9,7 +10,7 @@ namespace TPW.Prezentacja.ViewModel.Commands
 
         public GenerateBallsCommand(MainViewModel mainView)
         {
-            this.mainViewModel = mainView;
+            mainViewModel = mainView;
             mainViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
         public override bool CanExecute(object? parameter)
@@ -18,9 +19,10 @@ namespace TPW.Prezentacja.ViewModel.Commands
         }
         public override void Execute(object? parameter) 
         {
-            this.mainViewModel.model.GenerateBalls(this.mainViewModel.BallsNumber, this.mainViewModel.BallsRadius, MainViewModel.MinBallVel, MainViewModel.MaxBallVel); ; ; ;  ;  ;
+            this.mainViewModel.model.GenerateBalls(this.mainViewModel.BallsNumber, MainViewModel.BallsRadius, MainViewModel.MinBallVel, MainViewModel.MaxBallVel);
             this.mainViewModel.OnPropertyChanged(nameof(this.mainViewModel.Balls));
-            this.mainViewModel.Start();
+            MessageBox.Show("Generated " + mainViewModel.BallsNumber + " Balls" + "Radius is" + MainViewModel.BallsRadius + "Minimal Velocity " + MainViewModel.MinBallVel + "Maximal Velocity " + MainViewModel.MaxBallVel + "Max Balls" + this.mainViewModel.MaxBallsNumber, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.mainViewModel.model.Start();
         }
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {

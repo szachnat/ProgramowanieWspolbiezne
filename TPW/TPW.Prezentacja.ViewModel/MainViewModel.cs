@@ -17,11 +17,12 @@ namespace TPW.Prezentacja.ViewModel
         private uint _ballsNum;
         public uint BallsNumber { get { return _ballsNum; } set { _ballsNum = value; OnPropertyChanged(nameof(BallsNumber)); } }
         private uint _maxBallsNum;
-        public uint MaxBallsNumber { get { return _maxBallsNum; } set { _maxBallsNum = value; OnPropertyChanged(nameof(MaxBallsNumber)); } }
-        private uint _ballsRadius;
-        public uint BallsRadius { get { return _ballsRadius; } set { _ballsRadius = value; OnPropertyChanged(nameof(BallsRadius)); } }
-        public static uint MaxBallVel => 10;
-        public static uint MinBallVel => 100;
+        public uint MaxBallsNumber { get { return _maxBallsNum; } private set { if (_maxBallsNum != value) { _maxBallsNum = value; OnPropertyChanged(nameof(MaxBallsNumber)); } } }
+        /*private uint _ballsRadius;
+        public uint BallsRadius { get { return _ballsRadius; } set { _ballsRadius = value; OnPropertyChanged(nameof(BallsRadius)); } }*/
+        public static double BallsRadius => 20;
+        public static double MaxBallVel => 100;
+        public static double MinBallVel => 10;
         public ICommand GenerateBallsCommand { get; private set; }
 
         public MainViewModel()

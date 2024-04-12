@@ -16,9 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPW.Logika", "TPW.Logika\TP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tpw.Logika.Tests", "Tpw.Logika.Tests\Tpw.Logika.Tests.csproj", "{2ECF9446-6BE8-458C-9273-80C5A5A615E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPW.Prezentacja.Model", "TPW.Prezentacja.Model\TPW.Prezentacja.Model.csproj", "{509B0C54-496B-466B-80BB-D8213EE4D94D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPW.Prezentacja.Model", "TPW.Prezentacja.Model\TPW.Prezentacja.Model.csproj", "{509B0C54-496B-466B-80BB-D8213EE4D94D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPW.Prezentacja.ViewModel", "TPW.Prezentacja.ViewModel\TPW.Prezentacja.ViewModel.csproj", "{FE88AD0A-2092-4860-AC66-8EC35DE49D49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPW.Prezentacja.ViewModel", "TPW.Prezentacja.ViewModel\TPW.Prezentacja.ViewModel.csproj", "{FE88AD0A-2092-4860-AC66-8EC35DE49D49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
