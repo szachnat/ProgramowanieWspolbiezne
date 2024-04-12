@@ -7,10 +7,10 @@ namespace TPW.Prezentacja.Model
 {
     public abstract class ModelApiBase : IDisposable
     {
-        public abstract ObservableCollection<ModelBall> Balls { get; }
+        public abstract ObservableCollection<IModelBall> Balls { get; }
         public abstract double PlaneWidth { get; set; }
         public abstract double PlaneHeight { get; set; }
-        public abstract void GenerateBall(uint ballsNum, double minVel, double maxVel);
+        public abstract void GenerateBalls(uint ballsNum, double radius, double minVel, double maxVel);
         public abstract void Start();
         public abstract void Stop();
         public abstract void Dispose();
