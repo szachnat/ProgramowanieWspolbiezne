@@ -21,7 +21,7 @@ namespace TPW.Prezentacja.ViewModel.Commands
         {
             this.mainViewModel.model.GenerateBalls(this.mainViewModel.BallsNumber, MainViewModel.BallsRadius, MainViewModel.MinBallVel, MainViewModel.MaxBallVel);
             this.mainViewModel.OnPropertyChanged(nameof(this.mainViewModel.Balls));
-            MessageBox.Show("Generated " + mainViewModel.BallsNumber + " Balls" + "Radius is" + MainViewModel.BallsRadius + "Minimal Velocity " + MainViewModel.MinBallVel + "Maximal Velocity " + MainViewModel.MaxBallVel + "Max Balls" + this.mainViewModel.MaxBallsNumber, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Generated " + mainViewModel.BallsNumber + " balls", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             this.mainViewModel.model.Start();
         }
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
