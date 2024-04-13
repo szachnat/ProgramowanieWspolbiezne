@@ -27,8 +27,8 @@ namespace TPW.Prezentacja.Model
             set
             {
                 double radius = ball.GetRadius();
-                Pos2D canvadPos = ball.GetPos() - (new Pos2D(1, 1) * radius);
-                if (canvadPos.X != value.X || CanvasPos.Y != value.Y)
+                Pos2D canvasPos = ball.GetPos() - (new Pos2D(1, 1) * radius);
+                if (canvasPos.X != value.X || canvasPos.Y != value.Y)
                 {
                     ball.SetPos(value + (new Pos2D(1, 1) * radius));
                 }

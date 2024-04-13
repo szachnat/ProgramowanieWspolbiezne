@@ -11,20 +11,20 @@
              xmlns:model="clr-namespace:TPW.Prezentacja.Model;assembly=TPW.Prezentacja.Model"
              xmlns:ext="clr-namespace:TPW.Prezentacja.ViewModel.Extensions;assembly=TPW.Prezentacja.ViewModel"
              xmlns:local="clr-namespace:TPW"
-             Title="Balls" d:DesignHeight="450" d:DesignWidth="800"
+             Title="MainWindow" d:DesignHeight="450" d:DesignWidth="800"
              mc:Ignorable="d">
     <Window.DataContext>
         <viewmodel:MainViewModel/>
     </Window.DataContext>
     <Grid Background="White">
-        <Label Content="Number of Balls" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top"/>
-        <xctk:IntegerUpDown Increment="1" Maximum="5000" Minimum="0" Value="{Binding BallsNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="7,57,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Command="{Binding GenerateBallsCommand}" Content="Generate Balls" HorizontalAlignment="Left" Width="124" Height="36" VerticalAlignment="Bottom" Margin="38,0,0,10"/>
+        <Label Content="Enter number of balls" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top"/>
+        <xctk:IntegerUpDown Increment="1" Maximum="{Binding MaxBallsNumber, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Value="{Binding BallsNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="7,57,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Command="{Binding GenerateBallsCommand}" Content="Generate Balls" HorizontalAlignment="Left" Width="124" Height="37" VerticalAlignment="Bottom" Margin="38,0,0,46"/>
         <GridSplitter x:Name="gridSplitter" HorizontalAlignment="Left" Margin="218,0,0,0" Width="5"/>
         <ItemsControl ItemsSource="{Binding Balls, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas x:Name="BallCanvas" Margin="228,10,10,10" Background="White"
+                    <Canvas x:Name="BallCanvas" Margin="228,10,10,10" Background="#FF8C8C8C"
                             ext:ActualSizeGetter.ActualSize="True"
                             ext:ActualSizeGetter.ActualWidth="{Binding PlaneWidth, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                             ext:ActualSizeGetter.ActualHeight="{Binding PlaneHeight, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
@@ -32,21 +32,21 @@
                             <DropShadowEffect/>
                         </Canvas.Effect>
                     </Canvas>
-                    </ItemsPanelTemplate>
+                </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding CanvasPos.X,  UpdateSourceTrigger=PropertyChanged}"/>
+                <Style TargetType="{x:Type ContentPresenter}">
+                    <Setter Property="Canvas.Left" Value="{Binding CanvasPos.X, UpdateSourceTrigger=PropertyChanged}" />
                     <Setter Property="Canvas.Top" Value="{Binding CanvasPos.Y, UpdateSourceTrigger=PropertyChanged}"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Ellipse Height="{Binding Diameter}" Width="{Binding Diameter}" Stroke="Green" Fill="White" StrokeThickness="1.5"/>
+                <DataTemplate DataType="{x:Type model:ModelBall}">
+                    <Ellipse Fill="{Binding Color, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Width="{Binding Diameter, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                             Height="{Binding Diameter, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
-
     </Grid>
 </Window>
