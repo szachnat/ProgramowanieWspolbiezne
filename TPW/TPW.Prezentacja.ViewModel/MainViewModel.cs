@@ -26,12 +26,14 @@ namespace TPW.Prezentacja.ViewModel
         public static double MaxBallVel => 100;
         public static double MinBallVel => 10;
         public ICommand GenerateBallsCommand { get; private set; }
+        public ICommand StopSimulationCommand { get; private set; }
 
         public MainViewModel()
         {
             this.BallsNumber = 0;
             this.MaxBallsNumber = 0;
             this.GenerateBallsCommand = new GenerateBallsCommand(this);
+            this.StopSimulationCommand = new StopSimulationCommand(this);
             this.model = ModelApiBase.GetApi();
             this.PropertyChanged += RecalculateMaxBallsNumber;
         }

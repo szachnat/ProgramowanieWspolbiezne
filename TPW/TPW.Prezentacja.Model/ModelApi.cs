@@ -47,6 +47,7 @@ namespace TPW.Prezentacja.Model
         public override void Stop()
         {
             this.logika.StopSimulation();
+            this._balls?.Clear();
         }
         public override void Dispose()
         {

@@ -20,6 +20,8 @@
         <Label Content="Enter number of balls" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top"/>
         <xctk:IntegerUpDown Increment="1" Maximum="{Binding MaxBallsNumber, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Value="{Binding BallsNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="15,57,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="43"/>
         <Button Command="{Binding GenerateBallsCommand}" Content="Generate Balls" HorizontalAlignment="Left" Width="124" Height="37" VerticalAlignment="Bottom" Margin="38,0,0,46"/>
+        <Button Command="{Binding StopSimulationCommand}" Content="Stop Simulation" HorizontalAlignment="Left" Width="124" Height="41" VerticalAlignment="Bottom" Margin="38,0,0,88"/>
+
         <GridSplitter x:Name="gridSplitter" HorizontalAlignment="Left" Margin="218,0,0,0" Width="5"/>
         <ItemsControl ItemsSource="{Binding Balls, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <ItemsControl.ItemsPanel>
