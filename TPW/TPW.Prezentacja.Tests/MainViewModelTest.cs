@@ -39,11 +39,11 @@ namespace TPW.Prezentacja.Tests
                 Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
             });
 
-            ((MainViewModel)viewModel).PlaneWidth = 100d;
+            ((MainViewModel)viewModel).PlaneWidth = 300d;
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(100d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
+                Assert.AreEqual(300d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
                 Assert.AreEqual(0d, ((MainViewModel)viewModel).PlaneHeight, 0.01d);
                 Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
             });
@@ -52,7 +52,7 @@ namespace TPW.Prezentacja.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(100d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
+                Assert.AreEqual(300d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
                 Assert.AreEqual(200d, ((MainViewModel)viewModel).PlaneHeight, 0.01d);
                 Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
             });

@@ -6,6 +6,9 @@ using TPW.Prezentacja.ViewModel.Commands;
 
 namespace TPW.Prezentacja.ViewModel
 {
+    /// <summary>
+    /// Klasa implementująca główny ViewModel
+    /// </summary>
     public class MainViewModel : ViewModelBase
     {
         public ModelApiBase model;
@@ -18,8 +21,7 @@ namespace TPW.Prezentacja.ViewModel
         public uint BallsNumber { get { return _ballsNum; } set { _ballsNum = value; OnPropertyChanged(nameof(BallsNumber)); } }
         private uint _maxBallsNum;
         public uint MaxBallsNumber { get { return _maxBallsNum; } private set { if (_maxBallsNum != value) { _maxBallsNum = value; OnPropertyChanged(nameof(MaxBallsNumber)); } } }
-        /*private uint _ballsRadius;
-        public uint BallsRadius { get { return _ballsRadius; } set { _ballsRadius = value; OnPropertyChanged(nameof(BallsRadius)); } }*/
+        
         public static double BallsRadius => 20;
         public static double MaxBallVel => 100;
         public static double MinBallVel => 10;
@@ -33,6 +35,10 @@ namespace TPW.Prezentacja.ViewModel
             this.model = ModelApiBase.GetApi();
             this.PropertyChanged += RecalculateMaxBallsNumber;
         }
+
+        /// <summary>
+        /// Funkcja kalkulująca maksymalną ilość kulek w zależności od wielkości planszy
+        /// </summary>
         void RecalculateMaxBallsNumber(object? source, PropertyChangedEventArgs? e)
         {
             if (e?.PropertyName == nameof(PlaneWidth) || e?.PropertyName == nameof(PlaneHeight))

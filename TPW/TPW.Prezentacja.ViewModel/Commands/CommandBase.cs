@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace TPW.Prezentacja.ViewModel.Commands
 {
+    /// <summary>
+    /// Baza klas Command
+    /// </summary>
     internal abstract class CommandBase : ICommand
     {
         public event EventHandler? CanExecuteChanged;

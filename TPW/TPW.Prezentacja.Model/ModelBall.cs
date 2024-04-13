@@ -6,10 +6,16 @@ using TPW.Dane;
 
 namespace TPW.Prezentacja.Model
 {
+    /// <summary>
+    /// Klasa modelu kulki
+    /// </summary>
     public class ModelBall : IModelBall
     {
         private readonly IBall ball;
 
+        /// <summary>
+        /// Średnica kulki
+        /// </summary>
         public double Diameter
         {
             get
@@ -18,6 +24,9 @@ namespace TPW.Prezentacja.Model
             }
         }
 
+        /// <summary>
+        /// Położenie kulki
+        /// </summary>
         public Pos2D CanvasPos
         {
             get
@@ -35,6 +44,9 @@ namespace TPW.Prezentacja.Model
             }
         }
 
+        /// <summary>
+        /// Kolor kulki
+        /// </summary>
         public Brush? Color { get; }
 
         public ModelBall(IBall ball, Brush? color)

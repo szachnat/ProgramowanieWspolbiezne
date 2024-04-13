@@ -5,11 +5,20 @@ using TPW.Dane;
 using TPW.Logika;
 namespace TPW.Prezentacja.Model
 {
+    /// <summary>
+    /// Klasa modelu api
+    /// </summary>
     internal class ModelApi : ModelApiBase
     {
         private ObservableCollection<IModelBall> _balls;
         public override ObservableCollection<IModelBall> Balls => _balls;
+        /// <summary>
+        /// Szerokość planszy
+        /// </summary>
         public override double PlaneWidth { get => logika.PlaneWidth; set => logika.PlaneWidth = value; }
+        /// <summary>
+        /// Wysokość planszy
+        /// </summary>
         public override double PlaneHeight { get => logika.PlaneHeight; set => logika.PlaneHeight = value; }
         private readonly LogikaApiBase logika;
 

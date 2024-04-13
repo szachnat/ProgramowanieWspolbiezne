@@ -5,6 +5,9 @@ using TPW.Dane;
 
 namespace TPW.Prezentacja.Model
 {
+    /// <summary>
+    /// Interfejs implementowany przez ModelBall
+    /// </summary>
     public interface IModelBall : INotifyPropertyChanged, IDisposable
     {
         double Diameter { get; }

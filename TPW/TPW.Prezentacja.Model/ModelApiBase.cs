@@ -5,6 +5,9 @@ using System.Collections.ObjectModel;
 
 namespace TPW.Prezentacja.Model
 {
+    /// <summary>
+    /// Baza klas z ModelApi
+    /// </summary>
     public abstract class ModelApiBase : IDisposable
     {
         public abstract ObservableCollection<IModelBall> Balls { get; }
