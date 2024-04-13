@@ -24,7 +24,7 @@ namespace TPW.Prezentacja.ViewModel
         
         public static double BallsRadius => 20;
         public static double MaxBallVel => 100;
-        public static double MinBallVel => 10;
+        public static double MinBallVel => -100;
         public ICommand GenerateBallsCommand { get; private set; }
         public ICommand StopSimulationCommand { get; private set; }
 
