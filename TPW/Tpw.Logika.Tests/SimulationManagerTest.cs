@@ -63,23 +63,23 @@ namespace TPW.Logika.Tests
             Assert.IsNotNull(sim.Balls);
             Assert.AreEqual(count, sim.Balls.Count);
 
-            for (uint i = 0; i < count; ++i)
+            bool IsInBall(IBall ball)
             {
-                // Radius
-                Assert.LessOrEqual(sim.Balls[(int)i].GetRadius(), 10d);
-                Assert.GreaterOrEqual(sim.Balls[(int)i].GetRadius(), 0.1d);
+                foreach (IBall b in sim.Balls)
+                {
+                    if (b == ball) continue;
 
-                // Pos
-                Assert.LessOrEqual(sim.Balls[(int)i].GetPos().X, 100d);
-                Assert.GreaterOrEqual(sim.Balls[(int)i].GetPos().X, 0d);
-                Assert.LessOrEqual(sim.Balls[(int)i].GetPos().Y, 90d);
-                Assert.GreaterOrEqual(sim.Balls[(int)i].GetPos().Y, 0d);
+                    double x = b.GetPos().X - ball.GetPos().X;
+                    double y = b.GetPos().Y - ball.GetPos().Y;
+                    double r = b.GetRadius() + ball.GetRadius();
 
-                // Vel
-                Assert.LessOrEqual(sim.Balls[(int)i].GetVel().X, 6d);
-                Assert.GreaterOrEqual(sim.Balls[(int)i].GetVel().X, 1d);
-                Assert.LessOrEqual(sim.Balls[(int)i].GetVel().Y, 6d);
-                Assert.GreaterOrEqual(sim.Balls[(int)i].GetVel().Y, 1d);
+                    if (x * x + y * y < r * r)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
         }
 
@@ -116,104 +116,126 @@ namespace TPW.Logika.Tests
         }
 
         [Test]
-        public void CheckCollisionsTest()
+        public void IsInBallTest()
         {
-            Pos2D lastPos = new()
-            {
-                X = 90d,
-                Y = 85d
-            };
+            SimulationManager sim = new(new Plane(100d, 90d));
 
-            Pos2D newPos = new()
-            {
-                X = 158d,
-                Y = 179d
-            };
+            Assert.IsNotNull(sim);
+            Assert.IsNotNull(sim.Balls);
 
-            Pos2D currVel = new()
-            {
-                X = 3.4d,
-                Y = 4.7d
-            };
+            sim.CreateRandomBalls(1, 10d, 1d, 6d);
 
-            double radius = 4d;
+            Assert.IsNotNull(sim.Balls);
+            Assert.AreEqual(1, sim.Balls.Count);
 
-            double totalTime = 20d;
+            Pos2D pos = sim.Balls[0].GetPos();
+            double radius = sim.Balls[0].GetRadius();
 
-            SimulationManager c = new(new Plane(100d, 90d));
-            Assert.IsNotNull(c);
+            Ball centerBall = new(111, 10d, pos, new Pos2D(10, 10));
+            Ball insideBall = new(666, 10d, new Pos2D(pos.X - radius, pos.Y + radius), new Pos2D(10, 10));
+            Ball rightBall = new(222, 10d, new Pos2D(pos.X - radius - 10.05, pos.Y), new Pos2D(10, 10));
+            Ball leftBall = new(333, 10d, new Pos2D(pos.X + radius + 10.05, pos.Y), new Pos2D(10, 10));
+            Ball topBall = new(444, 10d, new Pos2D(pos.X, pos.Y - radius - 10.05), new Pos2D(10, 10));
+            Ball bottomBall = new(555, 10d, new Pos2D(pos.X, pos.Y + radius + 10.05), new Pos2D(10, 10));
+            Ball someBall = new(666, 10d, new Pos2D(pos.X - radius - 20, pos.Y - radius - 20), new Pos2D(10, 10));
 
-            IBall ball = new Ball(100L, radius, lastPos, currVel);
-            Assert.IsNotNull(ball);
-
-            var method = c.GetType().GetMethod("CheckCollisions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var method = sim.GetType().GetMethod("IsInBall", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.That(method, Is.Not.Null);
             Assert.That(method.IsConstructor, Is.False);
 
-            method.Invoke(c, new object[] { ball, new PositionChangeEventArgs(lastPos, newPos, totalTime) });
-
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(34d, ball.GetPos().X, 0.01d);
-                Assert.AreEqual(15d, ball.GetPos().Y, 0.01d);
-                Assert.AreEqual(-3.4d, ball.GetVel().X, 0.01d);
-                Assert.AreEqual(4.7d, ball.GetVel().Y, 0.01d);
+                Assert.That((bool)method.Invoke(sim, new object[] { centerBall }), Is.True);
+                Assert.That((bool)method.Invoke(sim, new object[] { insideBall }), Is.True);
+                Assert.That((bool)method.Invoke(sim, new object[] { rightBall }), Is.False);
+                Assert.That((bool)method.Invoke(sim, new object[] { leftBall }), Is.False);
+                Assert.That((bool)method.Invoke(sim, new object[] { topBall }), Is.False);
+                Assert.That((bool)method.Invoke(sim, new object[] { bottomBall }), Is.False);
+                Assert.That((bool)method.Invoke(sim, new object[] { someBall }), Is.False);
             });
         }
 
         [Test]
-        public void CheckCollisionsRecursionTest()
+        public void CheckPlaneBordersCollisionsTest()
         {
-            Pos2D lastPos = new()
-            {
-                X = 90d,
-                Y = 85d
-            };
+            SimulationManager sim = new SimulationManager(new Plane(10, 10));
 
-            Pos2D newPos = new()
-            {
-                X = 158d,
-                Y = 179d
-            };
+            Pos2D lastPos = new Pos2D { X = 4, Y = 2 };
+            Pos2D lastVel = new Pos2D { X = 2, Y = -2 };
+            double totalTime = 2d;
+            IBall ball = new Ball(1L, 1d, new Pos2D { X = 8, Y = -2 }, new Pos2D { X = 2, Y = 2 });
 
-            Pos2D currVel = new()
-            {
-                X = 3.4d,
-                Y = 4.7d
-            };
+            var method = sim.GetType().GetMethod("CheckPlaneBordersCollisions", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            double radius = 4d;
+            Assert.IsNotNull(method);
 
-            double totalTime = 20d;
+            var res = (ValueTuple<Pos2D, Pos2D, double>)method.Invoke(sim, new object?[] { ball, lastPos, lastVel, totalTime });
 
-            SimulationManager c = new(new Plane(100d, 90d));
-            Assert.IsNotNull(c);
-            var method = c.GetType().GetMethod("CheckCollisionsRecursion", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.That(method, Is.Not.Null);
-            Assert.That(method.IsConstructor, Is.False);
+            Assert.NotNull(res);
 
-            ValueTuple<Pos2D, Pos2D> test = (ValueTuple<Pos2D, Pos2D>)method.Invoke(c, new object[] { lastPos, newPos, currVel, radius, totalTime, (uint)3, (uint)0 });
+            (Pos2D newLast, Pos2D newVel, double newTime) = res;
 
-            List<Pos2D> list = new()
-            {
-                test.Item1, test.Item2
-            };
+            Assert.NotNull(newLast);
+            Assert.NotNull(newVel);
 
-            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual(totalTime - 0.5, newTime, 0.01d);
+            Assert.AreEqual(5.0d, newLast.X, 0.01d);
+            Assert.AreEqual(1.0d, newLast.Y, 0.01d);
+            Assert.AreEqual(2.0d, newVel.X, 0.01d);
+            Assert.AreEqual(2.0d, newVel.Y, 0.01d);
+        }
 
-            Assert.Multiple(() =>
-            {
-                Assert.AreEqual(test.Item1, list[0]);
-                Assert.AreEqual(test.Item2, list[1]);
-            });
+        [Test]
+        public void CheckBallsCollisionsTest()
+        {
+            SimulationManager sim = new SimulationManager(new Plane(10, 10));
 
-            Assert.Multiple(() =>
-            {
-                Assert.AreEqual(34d, list[0].X, 0.01d);
-                Assert.AreEqual(15d, list[0].Y, 0.01d);
-                Assert.AreEqual(-3.4d, list[1].X, 0.01d);
-                Assert.AreEqual(4.7d, list[1].Y, 0.01d);
-            });
+            sim.CreateRandomBalls(1, 1, 0, 0);
+
+            Assert.That(sim.Balls.Count, Is.EqualTo(1));
+
+            Pos2D lastPos = sim.Balls[0].GetPos() + new Pos2D { X = 3, Y = 3 };
+            Pos2D lastVel = new Pos2D { X = -3, Y = -3 };
+            double totalTime = 2d;
+            IBall ball = new Ball(1L, 1d, sim.Balls[0].GetPos() - new Pos2D { X = 3, Y = 3 }, new Pos2D { X = -3, Y = -3 });
+
+            var method = sim.GetType().GetMethod("CheckBallsCollisions", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.IsNotNull(method);
+
+            var res = (ValueTuple<Pos2D, Pos2D, double>)method.Invoke(sim, new object?[] { ball, lastPos, lastVel, totalTime });
+
+            Assert.NotNull(res);
+
+            (Pos2D newLast, Pos2D newVel, double newTime) = res;
+
+            Assert.NotNull(newLast);
+            Assert.NotNull(newVel);
+
+            Assert.AreEqual(totalTime - 0.528888d, newTime, 0.01d);
+        }
+
+        [Test]
+        public void CheckCollisionsTest()
+        {
+            SimulationManager sim = new(new Plane(10, 10));
+
+            sim.CreateRandomBalls(1, 1, 0, 0);
+
+            Assert.That(sim.Balls.Count, Is.EqualTo(1));
+
+            Pos2D lastPos = sim.Balls[0].GetPos() + new Pos2D { X = 3, Y = 3 };
+            Pos2D lastVel = new Pos2D { X = -3, Y = -3 };
+            double totalTime = 2d;
+            IBall ball = new Ball(1L, 1d, sim.Balls[0].GetPos() - new Pos2D { X = 3, Y = 3 }, new Pos2D { X = -3, Y = -3 });
+
+            var method = sim.GetType().GetMethod("CheckCollisions", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.IsNotNull(method);
+
+            method.Invoke(sim, new object?[] { ball, new PositionChangeEventArgs(lastPos, lastVel, totalTime) });
+
+            Assert.AreNotEqual(lastPos, ball.GetPos());
         }
     }
 }

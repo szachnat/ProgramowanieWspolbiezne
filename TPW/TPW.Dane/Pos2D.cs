@@ -48,6 +48,10 @@ namespace TPW.Dane
         {
             return new Pos2D { X = pos.X * mul, Y = pos.Y * mul };
         }
+        public static Pos2D operator *(double left, Pos2D right)
+        {
+            return new Pos2D { X = right.X * left, Y = right.Y * left };
+        }
 
         public static Pos2D operator /(Pos2D left, double right)
         {
@@ -90,6 +94,11 @@ namespace TPW.Dane
         {
             return pos1.X != pos2.X || pos1.Y != pos2.Y;
         }
+
+        public static Pos2D Zero { get { return new Pos2D { X = 0, Y = 0 }; } }
+        public static Pos2D One { get { return new Pos2D { X = 1, Y = 1 }; } }
+        public static Pos2D Right { get { return new Pos2D { X = 1, Y = 0 }; } }
+        public static Pos2D Down { get { return new Pos2D { X = 0, Y = 1 }; } }
 
         public override bool Equals(object? obj)
         {

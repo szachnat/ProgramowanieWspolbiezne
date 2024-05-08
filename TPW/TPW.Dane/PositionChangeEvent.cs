@@ -7,7 +7,7 @@ namespace TPW.Dane
     public class PositionChangeEventArgs : EventArgs
     {
         public Pos2D LastPos { get; private set; }
-        public Pos2D NewPos { get; private set; }
+        public Pos2D Vel { get; private set; }
         public double ElapsedSeconds { get; private set; }
 
         /// <summary>
@@ -16,10 +16,10 @@ namespace TPW.Dane
         /// <param name="lastPos">Poprzednia pozycja</param>
         /// <param name="newPos">Nowa pozytcja</param>
         /// <param name="seconds">Czas pomiędzy pozycjami</param>
-        public PositionChangeEventArgs(Pos2D lastPos, Pos2D newPos, double seconds)
+        public PositionChangeEventArgs(Pos2D lastPos, Pos2D vel, double seconds)
         {
             LastPos = lastPos;
-            NewPos = newPos;
+            Vel = vel;
             ElapsedSeconds = seconds;
         }
     }
