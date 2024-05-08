@@ -75,6 +75,24 @@ namespace TPW.Dane.Tests
         }
 
         [Test]
+        public void DivTest()
+        {
+            Pos2D pos = new(x, y);
+            Pos2D divPos;
+
+            //Assert.That(pos, Is.Not.Null);
+
+            Assert.Multiple(() =>
+            {
+                double div = 10;
+                divPos = pos / div;
+                //Assert.That(divPos, Is.Not.Null);
+                Assert.AreEqual(x / div, divPos.X, 0.01d);
+                Assert.AreEqual(y / div, divPos.Y, 0.01d);
+            });
+        }
+
+        [Test]
         public void AddTest()
         {
             Pos2D pos1 = new(x, y);
@@ -196,6 +214,95 @@ namespace TPW.Dane.Tests
                 Assert.That(pos2.GetHashCode() == pos1.GetHashCode(), Is.True);
                 Assert.That(pos2.GetHashCode() == pos3.GetHashCode(), Is.False);
             });
+        }
+
+        [Test]
+        public void LengthTest()
+        {
+            Pos2D pos = new(x, y);
+
+            //Assert.That(pos, Is.Not.Null);
+            Assert.AreEqual(Math.Sqrt(x * x + y * y), pos.Length, 0.01d);
+        }
+
+        [Test]
+        public void NormalizeTest()
+        {
+            Pos2D pos = new(x, y);
+            Pos2D normal = pos.Normalize;
+
+            /*Assert.Multiple(() =>
+            {
+                Assert.That(pos, Is.Not.Null);
+                Assert.That(normal, Is.Not.Null);
+            });*/
+
+            Assert.Multiple(() =>
+            {
+                Assert.LessOrEqual(normal.X, 1d);
+                Assert.LessOrEqual(normal.Y, 1d);
+                Assert.GreaterOrEqual(normal.X, 0d);
+                Assert.GreaterOrEqual(normal.Y, 0d);
+            });
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(x / pos.Length, normal.X, 0.01d);
+                Assert.AreEqual(y / pos.Length, normal.Y, 0.01d);
+            });
+        }
+
+        [Test]
+        public void SignTest()
+        {
+            Pos2D pos1 = new(x, y);
+            Pos2D pos2;
+
+            //Assert.That(pos1, Is.Not.Null);
+
+            Assert.Multiple(() =>
+            {
+                pos2 = +pos1;
+                Assert.AreEqual(x, pos2.X, 0.01d);
+                Assert.AreEqual(y, pos2.Y, 0.01d);
+            });
+
+            Assert.Multiple(() =>
+            {
+                pos2 = -pos1;
+                Assert.AreEqual(-x, pos2.X, 0.01d);
+                Assert.AreEqual(-y, pos2.Y, 0.01d);
+            });
+        }
+
+        [Test]
+        public void DotProductTest()
+        {
+            Pos2D pos1 = new(x, y);
+            Pos2D pos2 = new(2.1d, 1.011d);
+
+            /*Assert.Multiple(() =>
+            {
+                Assert.That(pos1, Is.Not.Null);
+                Assert.That(pos2, Is.Not.Null);
+            });*/
+
+            Assert.AreEqual(x * 2.1d + y * 1.011d, pos1.DotProduct(pos2), 0.01d);
+        }
+
+        [Test]
+        public void CalculateAngleTest()
+        {
+            Pos2D pos1 = new(x, y);
+            Pos2D pos2 = new(2.1d, 1.011d);
+
+            /*Assert.Multiple(() =>
+            {
+                Assert.That(pos1, Is.Not.Null);
+                Assert.That(pos2, Is.Not.Null);
+            });*/
+
+            Assert.AreEqual(Math.Acos((x * 2.1d + y * 1.011d) / (Math.Sqrt(x * x + y * y) * Math.Sqrt(2.1d * 2.1d + 1.011d * 1.011d))), pos1.CalculateAngle(pos2), 0.01d);
         }
     }
 }

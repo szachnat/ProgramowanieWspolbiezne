@@ -12,9 +12,15 @@ namespace TPW.Dane
         #region BallBase
 
         private readonly long _id;
+        private double m_mass;
         private double m_radius;
         private Pos2D m_pos;
         private Pos2D m_vel;
+
+        private readonly object mass_lock = new();
+        private readonly object radius_lock = new();
+        private readonly object pos_lock = new();
+        private readonly object vel_lock = new();
 
         /// <summary>
         /// Konstruktor kulek
@@ -23,9 +29,11 @@ namespace TPW.Dane
         /// <param name="radius">Promień kulki</param>
         /// <param name="pos">Pozycja startowa kulki</param>
         /// <param name="vel">Prędkość kulki</param>
-        public Ball (long id, double radius, Pos2D pos, Pos2D vel)
+        /// <param name="mass">Masa kulki</param>
+        public Ball (long id, double radius, Pos2D pos, Pos2D vel, double mass=10)
         {
             this._id = id;
+            this.m_mass = mass;
             this.m_radius = radius;
             this.m_pos = pos;
             this.m_vel = vel;
@@ -37,12 +45,27 @@ namespace TPW.Dane
         }
 
         /// <summary>
+        /// Setter masy kulki
+        /// </summary>
+        /// <param name="mass">Nowa masa</param>
+        public void SetMass(double mass)
+        {
+            lock (this.mass_lock)
+            {
+                this.m_mass = mass;
+            }
+        }
+
+        /// <summary>
         /// Setter promienia kulki
         /// </summary>
         /// <param name="radius">Nowy promień</param>
         public void SetRadius(double radius)
         {
-            this.m_radius = radius;
+            lock (this.radius_lock)
+            {
+                this.m_radius = radius;
+            }
         }
 
         /// <summary>
@@ -51,7 +74,10 @@ namespace TPW.Dane
         /// <param name="pos">Nowa pozycja</param>
         public void SetPos(Pos2D pos)
         {
-            this.m_pos = pos;
+            lock (this.pos_lock)
+            {
+                this.m_pos = pos;
+            }
         }
 
         /// <summary>
@@ -60,7 +86,10 @@ namespace TPW.Dane
         /// <param name="pos">Nowa prędkośc</param>
         public void SetVel(Pos2D vel)
         {
-            this.m_vel = vel;
+            lock (this.vel_lock)
+            {
+                this.m_vel = vel;
+            }
         }
 
         /// <summary>
@@ -73,12 +102,27 @@ namespace TPW.Dane
         }
 
         /// <summary>
+        /// Getter masy
+        /// </summary>
+        /// <returns>Zwraca mase</returns>
+        public double GetMass()
+        {
+            lock (this.mass_lock)
+            {
+                return this.m_mass;
+            }
+        }
+
+        /// <summary>
         /// Getter promienia
         /// </summary>
         /// <returns>Zwraca promień</returns>
         public double GetRadius()
         {
-            return this.m_radius;
+            lock (this.radius_lock)
+            {
+                return this.m_radius;
+            }
         }
 
         /// <summary>
@@ -87,7 +131,10 @@ namespace TPW.Dane
         /// <returns>Zwraca pozycje</returns>
         public Pos2D GetPos()
         {
-            return this.m_pos;
+            lock (this.pos_lock)
+            {
+                return this.m_pos;
+            }
         }
 
         /// <summary>
@@ -96,7 +143,10 @@ namespace TPW.Dane
         /// <returns>Zwraca prędkość</returns>
         public Pos2D GetVel()
         {
-            return this.m_vel;
+            lock (this.vel_lock)
+            {
+                return this.m_vel;
+            }
         }
 
         #endregion Ballbase
@@ -133,15 +183,13 @@ namespace TPW.Dane
             stopwatch.Start();
             while(!m_endThread)
             {
-                Pos2D previous = this.m_pos;
+                Pos2D previous = this.GetPos();
 
                 TimeSpan elapsed = stopwatch.Elapsed;
+                this.SetPos(this.GetPos() + this.GetVel() * elapsed.TotalSeconds);
+                OnPositionChange?.Invoke(this, new PositionChangeEventArgs(previous, this.m_vel, elapsed.TotalSeconds));
                 stopwatch.Restart();
-                Pos2D current = previous + (this.m_vel * elapsed.TotalSeconds);
-                this.m_pos = current;
-
-                OnPositionChange?.Invoke(this, new PositionChangeEventArgs(previous, current, elapsed.TotalSeconds));
-                Thread.Sleep(10);
+                Thread.Sleep(5);
             }
         }
 
@@ -162,6 +210,15 @@ namespace TPW.Dane
 
         public void Dispose()
         {
+            Delegate[] delegates = OnPositionChange?.GetInvocationList();
+            if (delegates != null)
+            {
+                foreach (Delegate d in delegates)
+                {
+                    OnPositionChange -= (PositionChangeEventHandler)d;
+                }
+            }
+
             EndThread();
             GC.SuppressFinalize(this);
         }

@@ -49,6 +49,11 @@ namespace TPW.Dane
             return new Pos2D { X = pos.X * mul, Y = pos.Y * mul };
         }
 
+        public static Pos2D operator /(Pos2D left, double right)
+        {
+            return new Pos2D { X = left.X / right, Y = left.Y / right };
+        }
+
         /// <summary>
         /// Dodawanie
         /// </summary>
@@ -57,6 +62,10 @@ namespace TPW.Dane
         public static Pos2D operator +(Pos2D pos1, Pos2D pos2)
         {
             return new Pos2D { X = pos1.X + pos2.X, Y = pos1.Y + pos2.Y };
+        }
+        public static Pos2D operator +(Pos2D pos)
+        {
+            return new Pos2D { X = pos.X, Y = pos.Y };
         }
 
         /// <summary>
@@ -67,6 +76,10 @@ namespace TPW.Dane
         public static Pos2D operator -(Pos2D pos1, Pos2D pos2)
         {
             return new Pos2D { X = pos1.X - pos2.X, Y = pos1.Y - pos2.Y };
+        }
+        public static Pos2D operator -(Pos2D pos)
+        {
+            return new Pos2D { X = -pos.X, Y = -pos.Y };
         }
 
         public static bool operator ==(Pos2D pos1, Pos2D pos2)
@@ -89,7 +102,29 @@ namespace TPW.Dane
             return X.GetHashCode() ^ Y.GetHashCode();
         }
 
-
+        public double Length
+        {
+            get
+            {
+                return Math.Sqrt(X * X + Y * Y);
+            }
+        }
+        public Pos2D Normalize
+        {
+            get
+            {
+                double dist = Length;
+                return new Pos2D { X = X / dist, Y = Y / dist };
+            }
+        }
+        public double DotProduct(Pos2D other)
+        {
+            return this.X * other.X + this.Y * other.Y;
+        }
+        public double CalculateAngle(Pos2D other)
+        {
+            return Math.Acos(this.DotProduct(other) / (this.Length * other.Length));
+        }
     }
 
 }

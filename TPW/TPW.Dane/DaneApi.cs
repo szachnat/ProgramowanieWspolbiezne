@@ -26,19 +26,14 @@ namespace TPW.Dane
             double minY = minPos.Y + radius;
             double maxY = maxPos.Y - radius;
 
-            double temp;
             if (minX > maxX)
             {
-                temp = minX;
-                minX = maxX;
-                maxX = temp;
+                (minX, maxX) = (maxX, minX);
             }
 
             if (minY > maxY)
             {
-                temp = minY;
-                minY = maxY;
-                maxY = temp;
+                (minY, maxY) = (maxY, minY);
             }
 
             Pos2D pos = new(rnd.NextDouble() * (maxX - minX) + minX, rnd.NextDouble() * (maxY - minY) + minY);

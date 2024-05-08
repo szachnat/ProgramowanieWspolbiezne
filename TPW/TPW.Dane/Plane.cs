@@ -8,6 +8,9 @@
         private double m_width;
         private double m_height;
 
+        private object width_lock = new();
+        private object height_lock = new();
+
         /// <summary>
         /// Konstruktor planszy
         /// </summary>
@@ -24,7 +27,10 @@
         /// <param name="width">Nowa szerokość zerokość planszy</param>
         public void SetWidth(double width)
         {
-            this.m_width = width;
+            lock (width_lock)
+            {
+                this.m_width = width;
+            }
         }
 
         /// <summary>
@@ -33,7 +39,10 @@
         /// <param name="height">Nowa wysokość planszy</param>
         public void SetHeight(double height)
         {
-            this.m_height = height;
+            lock (height_lock)
+            {
+                this.m_height = height;
+            }
         }
 
         /// <summary>
@@ -42,7 +51,10 @@
         /// <returns>Zwraca szerokość planszy</returns>
         public double GetWidth()
         {
-            return m_width;
+            lock (width_lock)
+            {
+                return m_width;
+            }
         }
 
         /// <summary>
@@ -51,7 +63,10 @@
         /// <returns>Zwraca wysokość planszy</returns>
         public double GetHeight()
         {
-            return m_height;
+            lock (height_lock)
+            {
+                return m_height;
+            }
         }
     }
 }
