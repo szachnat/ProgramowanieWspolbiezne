@@ -1,6 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TPW.Prezentacja.Model;
 using TPW.Prezentacja.ViewModel.Commands;
 
@@ -19,8 +24,14 @@ namespace TPW.Prezentacja.ViewModel
         public double PlaneHeight { get => model.PlaneHeight; set { model.PlaneHeight = value; OnPropertyChanged(nameof(PlaneHeight)); } }
         private uint _ballsNum;
         public uint BallsNumber { get { return _ballsNum; } set { _ballsNum = value; OnPropertyChanged(nameof(BallsNumber)); } }
-        private uint _maxBallsNum;
-        public uint MaxBallsNumber { get { return _maxBallsNum; } private set { if (_maxBallsNum != value) { _maxBallsNum = value; OnPropertyChanged(nameof(MaxBallsNumber)); } } }
+
+        private uint _currentMaxBallsNumber;
+        public uint CurrentMaxBallsNumber { get { return _currentMaxBallsNumber; } set { if (value != _currentMaxBallsNumber) { _currentMaxBallsNumber = value; OnPropertyChanged(nameof(CurrentMaxBallsNumber)); } } }
+
+        public static uint MaxBallsNumber => 20;
+
+        public static double MinBallMass => 2;
+        public static double MaxBallMass => 20;
         
         public static double BallsRadius => 20;
         public static double MaxBallVel => 100;
@@ -28,14 +39,14 @@ namespace TPW.Prezentacja.ViewModel
         public ICommand GenerateBallsCommand { get; private set; }
         public ICommand StopSimulationCommand { get; private set; }
 
-        public MainViewModel()
+        public MainViewModel() : base()
         {
-            this.BallsNumber = 0;
-            this.MaxBallsNumber = 0;
+            BallsNumber = 0;
+            CurrentMaxBallsNumber = 0;
             this.GenerateBallsCommand = new GenerateBallsCommand(this);
             this.StopSimulationCommand = new StopSimulationCommand(this);
-            this.model = ModelApiBase.GetApi();
-            this.PropertyChanged += RecalculateMaxBallsNumber;
+            model = ModelApiBase.GetApi();
+            PropertyChanged += RecalculateMaxBallsNumber;
         }
 
         /// <summary>
@@ -45,10 +56,13 @@ namespace TPW.Prezentacja.ViewModel
         {
             if (e?.PropertyName == nameof(PlaneWidth) || e?.PropertyName == nameof(PlaneHeight))
             {
-                uint ballsInHeight = (uint)(PlaneHeight / (BallsRadius * 2));
-                uint ballsInWidth = (uint)(PlaneWidth / (BallsRadius * 2));
-                uint ballsNumber = ballsInHeight * ballsInWidth;
-                MaxBallsNumber = ballsNumber >= 40 ? ballsNumber - 40 : 0;
+                double height = Math.Max(PlaneHeight - 2 * BallsRadius, 0);
+                double width = Math.Max(PlaneWidth -  2* BallsRadius, 0);
+                double radius = Math.Sqrt((height * width) / (4 * (MaxBallsNumber + 40)));
+                uint currentMaxNumber = MaxBallsNumber;
+                currentMaxNumber = (uint)((height * width) / (4 * radius * radius));
+                currentMaxNumber = currentMaxNumber > 40 ? currentMaxNumber - 40 : currentMaxNumber;
+                CurrentMaxBallsNumber = currentMaxNumber;
             }
         }
     }
