@@ -28,11 +28,7 @@ namespace TPW.Prezentacja.ViewModel
         private uint _currentMaxBallsNumber;
         public uint CurrentMaxBallsNumber { get { return _currentMaxBallsNumber; } set { if (value != _currentMaxBallsNumber) { _currentMaxBallsNumber = value; OnPropertyChanged(nameof(CurrentMaxBallsNumber)); } } }
 
-        public static uint MaxBallsNumber => 20;
-
-        public static double MinBallMass => 2;
-        public static double MaxBallMass => 20;
-        
+        public static uint MaxBallsNumber => 20;        
         public static double BallsRadius => 20;
         public static double MaxBallVel => 100;
         public static double MinBallVel => -100;
@@ -43,12 +39,50 @@ namespace TPW.Prezentacja.ViewModel
         {
             BallsNumber = 0;
             CurrentMaxBallsNumber = 0;
-            this.GenerateBallsCommand = new GenerateBallsCommand(this);
-            this.StopSimulationCommand = new StopSimulationCommand(this);
+            //this.GenerateBallsCommand = new GenerateBallsCommand(this);
+            //this.StopSimulationCommand = new StopSimulationCommand(this);
+            GenerateBallsCommand = new SimpleCommand(this, Generate, (param) => { return BallsNumber > 0 && BallsNumber <= MaxBallsNumber; });
+            ((SimpleCommand)GenerateBallsCommand).OnExecuteDone += (object source, CommandEventArgs e) =>
+            {
+                MessageBox.Show("Generated " + BallsNumber + " balls", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
+            StopSimulationCommand = new SimpleCommand(this, Generate, (param) => { return BallsNumber > 0; });
+            ((SimpleCommand)GenerateBallsCommand).OnExecuteDone += (object source, CommandEventArgs e) =>
+            {
+                MessageBox.Show("Simulation stopped", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
+            
             model = ModelApiBase.GetApi();
             PropertyChanged += RecalculateMaxBallsNumber;
         }
 
+        private async Task<bool> Generate(object? parameter)
+        {
+            return await Task.Run(() =>
+            {
+                lock (Balls)
+                {
+                    model.GenerateBalls(BallsNumber, BallsRadius, MinBallVel, MaxBallVel);
+                    model.Start();
+                    OnPropertyChanged(nameof(Balls));
+                }
+                return true;
+            });
+        }
+
+        private async Task<bool> Stop(object? parameter)
+        {
+            return await Task.Run(() =>
+            {
+                lock (Balls)
+                {
+                    model.Stop();
+                    
+                    OnPropertyChanged(nameof(Balls));
+                }
+                return true;
+            });
+        }
         /// <summary>
         /// Funkcja kalkulująca maksymalną ilość kulek w zależności od wielkości planszy
         /// </summary>

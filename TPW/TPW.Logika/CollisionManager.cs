@@ -1,3 +1,4 @@
+using System.Windows;
 using TPW.Dane;
 
 namespace TPW.Logika

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿/*using System.ComponentModel;
 using System.Windows;
 using TPW.Dane;
 using TPW.Prezentacja.Model;
@@ -40,3 +40,4 @@ namespace TPW.Prezentacja.ViewModel.Commands
         }
     }
 }
+*/

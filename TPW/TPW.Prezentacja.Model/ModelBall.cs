@@ -54,6 +54,7 @@ namespace TPW.Prezentacja.Model
             this.ball = ball;
             this.ball.OnPositionChange += BallPositionUpdate;
             this.Color = color;
+            Color?.Freeze();
         }
 
         private void BallPositionUpdate(object sender, PositionChangeEventArgs e)
