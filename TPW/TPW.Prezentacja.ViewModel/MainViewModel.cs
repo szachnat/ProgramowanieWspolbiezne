@@ -46,8 +46,8 @@ namespace TPW.Prezentacja.ViewModel
             {
                 MessageBox.Show("Generated " + BallsNumber + " balls", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             };
-            StopSimulationCommand = new SimpleCommand(this, Generate, (param) => { return BallsNumber > 0; });
-            ((SimpleCommand)GenerateBallsCommand).OnExecuteDone += (object source, CommandEventArgs e) =>
+            StopSimulationCommand = new SimpleCommand(this, Stop, (param) => { return BallsNumber > 0; });
+            ((SimpleCommand)StopSimulationCommand).OnExecuteDone += (object source, CommandEventArgs e) =>
             {
                 MessageBox.Show("Simulation stopped", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             };
@@ -72,16 +72,9 @@ namespace TPW.Prezentacja.ViewModel
 
         private async Task<bool> Stop(object? parameter)
         {
-            return await Task.Run(() =>
-            {
-                lock (Balls)
-                {
-                    model.Stop();
-                    
-                    OnPropertyChanged(nameof(Balls));
-                }
-                return true;
-            });
+             model.Stop();
+            OnPropertyChanged(nameof(Balls));
+            return true;
         }
         /// <summary>
         /// Funkcja kalkulująca maksymalną ilość kulek w zależności od wielkości planszy

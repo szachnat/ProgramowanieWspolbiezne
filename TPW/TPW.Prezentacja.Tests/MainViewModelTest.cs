@@ -19,8 +19,9 @@ namespace TPW.Prezentacja.Tests
                 Assert.AreEqual(0, ((MainViewModel)viewModel).PlaneWidth);
                 Assert.AreEqual(0, ((MainViewModel)viewModel).PlaneHeight);
                 Assert.AreEqual(0, ((MainViewModel)viewModel).BallsNumber);
-                Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
+                Assert.AreEqual(0, ((MainViewModel)viewModel).CurrentMaxBallsNumber);
                 Assert.IsNotNull(((MainViewModel)viewModel).GenerateBallsCommand);
+                Assert.IsNotNull(((MainViewModel)viewModel).StopSimulationCommand);
             });
         }
 
@@ -36,7 +37,7 @@ namespace TPW.Prezentacja.Tests
                 Assert.AreEqual(0d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
                 Assert.AreEqual(0d, ((MainViewModel)viewModel).PlaneHeight, 0.01d);
                 Assert.AreEqual(0, ((MainViewModel)viewModel).BallsNumber);
-                Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
+                Assert.AreEqual(0, ((MainViewModel)viewModel).CurrentMaxBallsNumber);
             });
 
             ((MainViewModel)viewModel).PlaneWidth = 300d;
@@ -45,7 +46,7 @@ namespace TPW.Prezentacja.Tests
             {
                 Assert.AreEqual(300d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
                 Assert.AreEqual(0d, ((MainViewModel)viewModel).PlaneHeight, 0.01d);
-                Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
+                Assert.AreEqual(0, ((MainViewModel)viewModel).CurrentMaxBallsNumber);
             });
 
             ((MainViewModel)viewModel).PlaneHeight = 200d;
@@ -54,7 +55,7 @@ namespace TPW.Prezentacja.Tests
             {
                 Assert.AreEqual(300d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
                 Assert.AreEqual(200d, ((MainViewModel)viewModel).PlaneHeight, 0.01d);
-                Assert.AreEqual(0, ((MainViewModel)viewModel).MaxBallsNumber);
+                Assert.AreEqual(20d, ((MainViewModel)viewModel).CurrentMaxBallsNumber);
             });
 
             ((MainViewModel)viewModel).PlaneWidth = 2100d;
@@ -63,7 +64,7 @@ namespace TPW.Prezentacja.Tests
             {
                 Assert.AreEqual(2100d, ((MainViewModel)viewModel).PlaneWidth, 0.01d);
                 Assert.AreEqual(200d, ((MainViewModel)viewModel).PlaneHeight, 0.01d);
-                Assert.AreEqual(220, ((MainViewModel)viewModel).MaxBallsNumber);
+                Assert.AreEqual(19, ((MainViewModel)viewModel).CurrentMaxBallsNumber);
             });
 
             ((MainViewModel)viewModel).BallsNumber = 1;
