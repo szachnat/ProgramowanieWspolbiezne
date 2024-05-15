@@ -9,12 +9,13 @@ namespace TPW.Logika
     /// </summary>
     public class LogikaApi : LogikaApiBase
     {
-        private readonly SimulationManager simManager;
-        private readonly DaneApiBase dane;
-
         public override IEnumerable<IBall> Balls => simManager.Balls;
         public override double PlaneWidth { get => simManager.PlaneWidth; set => simManager.PlaneWidth = value; }
         public override double PlaneHeight { get => simManager.PlaneHeight; set => simManager.PlaneHeight = value; }
+
+        private readonly SimulationManager simManager;
+        private readonly DaneApiBase dane;
+
 
         /// <summary>
         /// Konstruktor 
@@ -35,8 +36,10 @@ namespace TPW.Logika
         /// <param name="maxVel">Maksymalna prędkość kulek</param>
         public override void GenerateRandomBalls(uint ballsNum, double radius, double minVel, double maxVel)
         {
+            BallLogger.Log("LogikaApi: Generating Random Balls", LogType.DEBUG);
             simManager.ClearBalls();
             simManager.CreateRandomBalls(ballsNum, radius, minVel, maxVel);
+            BallLogger.Log("LogikaApi: Generated Random Balls", LogType.DEBUG);
         }
 
         /// <summary>

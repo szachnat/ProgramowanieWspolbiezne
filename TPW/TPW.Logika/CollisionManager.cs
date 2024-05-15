@@ -67,14 +67,14 @@ namespace TPW.Logika
 
 
 
-        public static double TimeOfCollisionWithStaticCircle(Pos2D objPos, Pos2D objVel, Pos2D ballPos, double radius, double startAngle = 0, double endAngle = 0)
+        public static (double, double) TimesOfCollisionWithStaticCircle(Pos2D objPos, Pos2D objVel, Pos2D ballPos, double radius, double startAngle = 0, double endAngle = 0)
         {
-            return TimeOfCollisionWithMovingCircle(objPos, objVel, ballPos, Pos2D.Zero, radius, startAngle, endAngle);
+            return TimesOfCollisionWithMovingCircle(objPos, objVel, ballPos, Pos2D.Zero, radius, startAngle, endAngle);
         }
 
-        public static double TimeOfCollisionWithMovingCircle(Pos2D objPos, Pos2D objVel, Pos2D ballPos, Pos2D ballVel, double radius, double startAngle = 0, double endAngle = 0)
+        public static (double, double) TimesOfCollisionWithMovingCircle(Pos2D objPos, Pos2D objVel, Pos2D ballPos, Pos2D ballVel, double radius, double startAngle = 0, double endAngle = 0)
         {
-            if (radius == 0) return double.PositiveInfinity;
+            if (radius == 0) return (double.NegativeInfinity, double.PositiveInfinity);
 
             // Wypadkowe Vel (xv - xov, yv - yov)
             Pos2D wypVel = objVel - ballVel;
@@ -88,7 +88,7 @@ namespace TPW.Logika
 
             // delt = b^2 - 4ac
             double delt = b * b - 4 * a * c;
-            if (delt <= 0) return double.PositiveInfinity;
+            if (delt <= 0) return (double.NegativeInfinity, double.PositiveInfinity);
 
             double t1 = (-b - Math.Sqrt(delt)) / (2 * a);
             double t2 = (-b + Math.Sqrt(delt)) / (2 * a);
@@ -102,61 +102,38 @@ namespace TPW.Logika
                 {
                     (endAngle, startAngle) = (startAngle, endAngle);
                 }
-                if (endAngle == startAngle)
-                {
-                    endAngle += 360;
-                }
 
                 // Testowanie czy nale¿¹ pozycje kolizji do ³uku rysowanego od startAngle do endAngle
-                Pos2D cPos;
-                Pos2D bPos;
-                double cos;
-                double alpha;
-                double radians;
-                if (t1 >= 0 && t2 >= 0)
-                {
-                    double tmin = Math.Min(t1, t2);
-                    if (startAngle == endAngle) return tmin;
+                double tmin = Math.Min(t1, t2);
+                double tmax = Math.Max(t1, t2);
+                if (startAngle == endAngle) return (tmin, tmax);
 
-                    // Tesotowanie min(t1, t2)
-                    cPos = objPos + objVel * tmin;
-                    bPos = ballPos + ballVel * tmin;
+                // Tesotowanie czy min(t1, t2) nale¿y do ³uku
+                Pos2D cPos = objPos + objVel * tmin;
+                Pos2D bPos = ballPos + ballVel * tmin;
 
-                    cos = (cPos.X - bPos.X) / radius;
-                    radians = Math.Asin((cPos.Y - bPos.Y) / radius);
-                    if (cos < 0) radians += Math.PI;
+                double cos = (cPos.X - bPos.X) / radius;
+                double radians = Math.Asin((cPos.Y - bPos.Y) / radius);
+                if (cos < 0) radians += Math.PI;
 
-                    alpha = ((radians * 180) / Math.PI) % 360;
-                    if (alpha >= startAngle && alpha <= endAngle) return tmin;
+                double alpha = ((radians * 180) / Math.PI) % 360;
+                if (alpha < startAngle || alpha > endAngle) tmin = double.NegativeInfinity;
 
-                    // Jeœli pozycja dla tmin nie nale¿y do ³uku
-                    double tmax = Math.Max(t1, t2);
-                    cPos = objPos + objVel * tmax;
-                    bPos = ballPos + ballVel * tmax;
+                // Testowanie czy max(t1, t2) nale¿y do ³uku
+                cPos = objPos + objVel * tmax;
+                bPos = ballPos + ballVel * tmax;
 
-                    cos = (cPos.X + bPos.X) / radius;
-                    radians = Math.Asin((cPos.Y - bPos.Y) / radius);
-                    if (cos < 0) radians += Math.PI;
+                cos = (cPos.X + bPos.X) / radius;
+                radians = Math.Asin((cPos.Y - bPos.Y) / radius);
+                if (cos < 0) radians += Math.PI;
 
-                    alpha = ((radians * 180) / Math.PI) % 360;
-                    if (alpha >= startAngle && alpha <= endAngle) return tmax;
-                }
-                else if (t1 >= 0 || t2 >= 0)
-                {
-                    double tmin = Math.Min(t1, t2);
-                    cPos = objPos + objVel * tmin;
-                    bPos = ballPos + ballVel * tmin;
+                alpha = ((radians * 180) / Math.PI) % 360;
+                if (alpha < startAngle || alpha > endAngle) tmax = double.PositiveInfinity;
 
-                    cos = (cPos.X + bPos.X) / radius;
-                    radians = Math.Asin((cPos.Y - bPos.Y) / radius);
-                    if (cos < 0) radians += Math.PI;
-
-                    alpha = ((radians * 180) / Math.PI) % 360;
-                    if (alpha >= startAngle && alpha <= endAngle) return tmin;
-                }
+                return (tmin, tmax);
             }
 
-            return double.PositiveInfinity;
+            return (double.NegativeInfinity, double.PositiveInfinity);
         }
 
         // Calculating Bounce

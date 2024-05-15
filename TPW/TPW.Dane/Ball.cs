@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using System;
+using System.Text;
 
 namespace TPW.Dane
 {
@@ -168,9 +169,13 @@ namespace TPW.Dane
         /// </summary>
         public void StartThread()
         {
-            if (this.m_thread.ThreadState != System.Threading.ThreadState.Background) 
+            if ((this.m_thread.ThreadState & System.Threading.ThreadState.Background) == System.Threading.ThreadState.Background && (this.m_thread.ThreadState & System.Threading.ThreadState.Unstarted) == System.Threading.ThreadState.Unstarted)
             {
                 m_thread.Start();
+            }
+            else
+            {
+                BallLogger.Log(new StringBuilder("Tried to start thread which was already Started or not in Background State for Ball ").Append(this._id).ToString(), LogType.WARNING);
             }
         }
 
@@ -179,18 +184,33 @@ namespace TPW.Dane
         /// </summary>
         private void ThreadMethod()
         {
+            BallLogger.Log(new StringBuilder("Ball ").Append(this._id).Append(" thread started").ToString(), LogType.DEBUG);
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            while(!m_endThread)
+            while (!m_endThread)
             {
-                Pos2D previous = this.GetPos();
+                Pos2D lastPos = this.GetPos();
 
                 TimeSpan elapsed = stopwatch.Elapsed;
                 this.SetPos(this.GetPos() + this.GetVel() * elapsed.TotalSeconds);
-                OnPositionChange?.Invoke(this, new PositionChangeEventArgs(previous, this.m_vel, elapsed.TotalSeconds));
+                OnPositionChange?.Invoke(this, new PositionChangeEventArgs(lastPos, this.m_vel, elapsed.TotalSeconds));
+
+                Pos2D newPos = this.GetPos();
+                string message = new StringBuilder("Ball ")
+                                    .Append(_id)
+                                    .Append(" changed position from {x=").Append(lastPos.X)
+                                    .Append(", y=").Append(lastPos.Y)
+                                    .Append("} to {x=").Append(newPos.X)
+                                    .Append(", y=").Append(newPos.Y)
+                                    .Append("} in ").Append(elapsed.TotalSeconds).Append(" seconds")
+                                    .ToString();
+                BallLogger.Log(message, LogType.DEBUG);
+
                 stopwatch.Restart();
                 Thread.Sleep(5);
             }
+
+            BallLogger.Log(new StringBuilder("Ball ").Append(this._id).Append(" thread ended").ToString(), LogType.DEBUG);
         }
 
         /// <summary>
@@ -198,10 +218,14 @@ namespace TPW.Dane
         /// </summary>
         public void EndThread()
         {
-            if(this.m_thread.ThreadState == System.Threading.ThreadState.Background)
+            if ((this.m_thread.ThreadState & System.Threading.ThreadState.Background) == System.Threading.ThreadState.Background)
             {
                 this.m_endThread = true;
                 this.m_thread?.Join();
+            }
+            else
+            {
+                BallLogger.Log(new StringBuilder("Tried to stop thread which was not in Background State for Ball ").Append(this._id).ToString(), LogType.WARNING);
             }
         }
         #endregion Thread
