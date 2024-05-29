@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
+using System.Runtime.InteropServices;
 using TPW.Dane;
 using TPW.Logika;
 namespace TPW.Prezentacja.Model
@@ -21,6 +22,8 @@ namespace TPW.Prezentacja.Model
         /// </summary>
         public override double PlaneHeight { get => logika.PlaneHeight; set => logika.PlaneHeight = value; }
         private readonly LogikaApiBase logika;
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern void Sleep(uint milliseconds);
 
         public ModelApi(LogikaApiBase? logika = default)
         {
@@ -43,11 +46,14 @@ namespace TPW.Prezentacja.Model
         public override void Start()
         {
             this.logika.StartSimulation();
+            BallLogger.StartLogging();
         }
         public override void Stop()
         {
             this.logika.StopSimulation();
             this._balls?.Clear();
+            Sleep(1000);
+            BallLogger.StopLogging();
         }
         public override void Dispose()
         {
