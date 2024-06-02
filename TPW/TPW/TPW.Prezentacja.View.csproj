@@ -12,6 +12,7 @@
     <ProjectReference Include="..\TPW.Prezentacja.Model\TPW.Prezentacja.Model.csproj" />
     <ProjectReference Include="..\TPW.Prezentacja.ViewModel\TPW.Prezentacja.ViewModel.csproj" />
 	<PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+	<PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>
 
 </Project>
